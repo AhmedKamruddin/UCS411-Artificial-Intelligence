@@ -1,3 +1,5 @@
+[Lab Assignment 02.pdf](https://github.com/AhmedKamruddin/UCS411-Artificial-Intelligence/files/8288176/Lab.Assignment.02.pdf)
+
 Q1 WaterJugProblem.py
 ```
 import copy
@@ -11,6 +13,7 @@ class MyWaterJug:
     def fillFirstJug(self):
         if self.currentState[0]<4:
             self.prevState=copy.deepcopy(self)
+
             self.currentState[0]=4
             print("fillFirstJug")
             return True
