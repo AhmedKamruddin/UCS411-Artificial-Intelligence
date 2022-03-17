@@ -1,3 +1,5 @@
+[Lab Assignment 02.pdf](https://github.com/AhmedKamruddin/UCS411-Artificial-Intelligence/files/8288183/Lab.Assignment.02.pdf)
+
 Q1 WaterJugProblem.py
 ```
 import copy
