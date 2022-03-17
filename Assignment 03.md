@@ -1,4 +1,4 @@
-[Lab Assignment 03.pdf](https://github.com/AhmedKamruddin/UCS411-Artificial-Intelligence/files/8288216/Lab.Assignment.03.pdf)
+[Lab Assignment 03.pdf](https://github.com/AhmedKamruddin/UCS411-Artificial-Intelligence/files/8288216/Lab.Assignment.03.pdf)  
 Q1 Distances.py
 ```
 from cmath import sqrt
