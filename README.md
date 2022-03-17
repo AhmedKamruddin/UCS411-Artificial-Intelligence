@@ -1,2 +1,2 @@
 # UCS411-Artificial-Intelligence
-Codes for all AI Assignments
+Codes for AI Assignments
