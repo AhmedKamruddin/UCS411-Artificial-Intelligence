@@ -1,17 +1,24 @@
 import copy
-class TSP:
+
+class TSP():
     def __init__(self, map, startCity):
         TSP.map=map
         self.startCity=startCity
         self.currentCity=startCity
-        self.cost=0
         self.visitedList=[]
         self.visitedList.append(self.currentCity)
+        self.cost=0
         self.prevState=None
 
     def displayState(self):
-        print("--------------------------------")
-        print(f"Current city:{self.currentCity}     Visited cities={self.visitedList}     Cost={self.cost}")
+        print(f"Current city={self.currentCity} Visited cities={self.visitedList} Cost={self.cost}")
+        print("********************************")
+
+    def isGoalReached(self):
+        if len(self.visitedList)==len(TSP.map[0])+1:
+            return True
+        else:
+            return False
 
     def __gt__(self, other):
         return self.cost>other.cost
@@ -19,100 +26,97 @@ class TSP:
     def __lt__(self, other):
         return self.cost<other.cost
 
-    def __eq__(self, other):
-        return self.visitedList==other.visitedList
-
-    def isGoalReached(self):
-        if len(TSP.map[0])+1==len(self.visitedList):
-            return True
-        else:
-            return False
-
     def move(self, city):
-        if city!=self.currentCity and city not in self.visitedList:
-            print(f"Moving from city {self.currentCity} to {city}")
-            self.cost+=TSP.map[self.currentCity][city]
+        if TSP.map[self.currentCity][city]!=0 and city not in self.visitedList:
+            print(f"Moving from city {self.currentCity} to {city}.")
+            self.prevState=copy.deepcopy(self)
+            self.cost=self.cost+TSP.map[self.currentCity][city]
             self.currentCity=city
             self.visitedList.append(self.currentCity)
             return True
-        elif len(self.visitedList)==len(TSP.map[0]):
-            print(f"Moving from city {self.currentCity} to {self.startCity}")
-            self.cost+=TSP.map[self.currentCity][self.startCity]
-            self.currentCity=self.startCity
-            self.visitedList.append(self.startCity)
+        elif len(self.visitedList)==len(TSP.map[0]) and TSP.map[self.currentCity][city]!=0:
+            print(f"Moving from city {self.currentCity} to {city}.")
+            self.prevState=copy.deepcopy(self)
+            self.cost=self.cost+TSP.map[self.currentCity][city]
+            self.currentCity=city
+            self.visitedList.append(self.currentCity)
             return True
         else:
-            print("Already visited")
             return False
-
+    
     def possibleNextStates(self):
         stateList=[]
+
         for i in range(0, len(TSP.map[0])):
-            state=copy.deepcopy(self)
-            self.prevState=copy.deepcopy(self)
-            if state.move(i):
-                stateList.append(state)
+            stateCopy=copy.deepcopy(self)
+            if stateCopy.move(i):
+                stateList.append(stateCopy)
+        
         return stateList
 
-def constructPath(goalState):
-    print("The solution path from Goal to Start")
-    while goalState is not None:
+def constructGoalPath(goalState):
+    print("Displaying path from goal to start")
+    while goalState:
         goalState.displayState()
         goalState=goalState.prevState
 
 open=[]
 closed=[]
-def UCS(state):
-    open.append(state)
-    while(open):
+def UCS(startState):
+    open.append(startState)
+
+    while open:
         thisState=open.pop(0)
         thisState.displayState()
-        if thisState not in closed:
-            closed.append(thisState)
-            if thisState.isGoalReached():
-                print("Goal state found.. stopping search")
-                constructPath(thisState)
-                break   
-            else:
-                nextStates=thisState.possibleNextStates()
-                for eachState in nextStates:
-                    if eachState not in open and eachState not in closed:
+
+        closed.append(thisState)
+
+        if thisState.isGoalReached():
+            print("Goal found..")
+            constructGoalPath(thisState)
+            break
+        else:
+            nextStates=thisState.possibleNextStates()
+            for eachState in nextStates:
+                
+                #Case 1
+                if eachState not in open and eachState not in closed:
+                    open.append(eachState)
+                    open.sort()
+
+                #Case 2
+                elif eachState in open:
+                    index=open.index(eachState)
+                    if eachState<open[index]:
                         open.append(eachState)
                         open.sort()
-                    elif eachState in open:
-                        index=open.index(eachState)
-                        if open[index].cost>eachState.cost:
-                            open.pop(index)
-                            open.append(eachState)
-                            open.sort()
-                    elif eachState in closed:
-                        index=closed.index(eachState)
-                        if closed[index].cost>eachState.cost:
-                            closed.pop(index)
-                            closed.append(eachState)
-                            propogateImprovement(eachState)
 
-def propogateImprovement(state):
-    nextStates=state.possibleNextStates()
+                #Case 3
+                elif eachState in closed:
+                    index=closed.index(eachState)
+                    if eachState<closed[index]:
+                        closed.append(eachState)
+                        closed.sort()
+                        propogateImprovement(eachState)
+
+def propogateImprovement(thisState):
+    nextStates=thisState.nextPossibleStates()
     for eachState in nextStates:
         if eachState in open:
-            index=open.index[eachState]
-            if open[index].cost>eachState.cost:
-                open.pop(index)
+            index=open.index(eachState)
+            if eachState<open[index]:
                 open.append(eachState)
                 open.sort()
-            if eachState in closed:
-                index=closed.index(eachState)
-                if closed[index].cost>eachState.cost:
-                    closed.pop(index)
-                    closed.append(eachState)
-                    propogateImprovement(eachState)
+        
+        if eachState in closed:
+            index=closed.index(eachState)
+            if eachState<closed[index]:
+                closed.append(eachState)
+                closed.sort()
+                propogateImprovement(eachState)
 
+    
 map=[[0, 10, 15, 20], [10, 0, 35, 25], [15, 35, 0, 30], [20, 25, 30, 0]]
-start=int(input("Enter the start city "))
-problem=TSP(map, start)
+startCity=0
+problem=TSP(map, startCity)
 UCS(problem)
-        
-
-
-        
