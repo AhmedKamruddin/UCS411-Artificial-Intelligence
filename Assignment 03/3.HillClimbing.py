@@ -71,9 +71,6 @@ class MyEightPuzzle:
         else:
             return False
 
-    def _eq_(self, other):
-        return self.currentState==other.currentState
-
     def possibleNextStates(self):
         stateList=[]
         
@@ -138,6 +135,7 @@ def HillClimbing(startState):
                 if eachState.heuristic() < thisState.heuristic():
                     open.append(eachState)
                     closed.append(thisState)
+                    break
 
 start=[2, 0, 3, 1, 8, 4, 7, 6, 5]
 goal= [1, 2, 3, 8, 0, 4, 7, 6, 5]
