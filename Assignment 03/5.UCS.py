@@ -14,15 +14,6 @@ class MyShortestPath:
         print("--------------------------------")
         print(f"Current city:{self.currentCity}     Visited cities={self.visitedList}     Cost={self.cost}")
 
-    def __gt__(self, other):
-        return self.cost>other.cost
-
-    def __lt__(self, other):
-        return self.cost<other.cost
-
-    def __eq__(self, other):
-        return self.visitedList==other.visitedList
-
     def isGoalReached(self):
         if self.goalCity in self.visitedList:
             return True
