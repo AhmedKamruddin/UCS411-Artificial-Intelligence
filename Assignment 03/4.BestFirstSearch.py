@@ -71,9 +71,6 @@ class MyEightPuzzle:
         else:
             return False
 
-    def _eq_(self, other):
-        return self.currentState==other.currentState
-
     def possibleNextStates(self):
         stateList=[]
         
