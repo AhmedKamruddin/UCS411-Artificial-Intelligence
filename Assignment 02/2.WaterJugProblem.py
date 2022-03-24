@@ -1,298 +1,119 @@
 import copy
 
-class MyWaterJug:
-    def __init__(self, startState, goalState):
+class MyWaterJug():
+    def __init__(self, maxCapacity, startState, goalState):
+        self.maxCapacity=maxCapacity
         self.currentState=startState
         self.goalState=goalState
         self.prevState=None
 
-    def B2A_transferToFillFirst(self):
-        sum=self.currentState[0]+self.currentState[1]
-        if sum>0 and sum>=12 and self.currentState[1]>0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[1]=self.currentState[1]-( 12-self.currentState[0])
-            self.currentState[0]=12
-            print("B2A_transferToFillFirstJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
-
-    def C2A_transferToFillFirst(self):
-        sum=self.currentState[0]+self.currentState[2]
-        if sum>0 and sum>=12 and self.currentState[2]>0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[2]=self.currentState[2]-( 12-self.currentState[0])
-            self.currentState[0]=12
-            print("C2A_transferToFillFirstJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
-
-    def A2B_transferToFillSecond(self):
-        sum=self.currentState[0]+self.currentState[1]
-        if sum>0 and sum>=8 and self.currentState[0]>0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[0]=self.currentState[0]-( 8-self.currentState[1] )
-            self.currentState[1]=8
-            print("A2B_transferToFillSecondJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
-
-    def C2B_transferToFillSecond(self):
-        sum=self.currentState[1]+self.currentState[2]
-        if sum>0 and sum>=8 and self.currentState[2]>0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[2]=self.currentState[2]-( 8-self.currentState[1] )
-            self.currentState[1]=8
-            print("C2B_transferToFillSecondJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
-
-    def A2C_transferToFillThird(self):
-        sum=self.currentState[0]+self.currentState[2]
-        if sum>0 and sum>=5 and self.currentState[0]>0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[0]=self.currentState[0]-( 5-self.currentState[2] )
-            self.currentState[2]=5
-            print("A2C_transferToFillThirdJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
-
-    def B2C_transferToFillThird(self):
-        sum=self.currentState[1]+self.currentState[2]
-        if sum>0 and sum>=5 and self.currentState[1]>0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[1]=self.currentState[1]-( 5-self.currentState[2] )
-            self.currentState[2]=5
-            print("B2C_transferToFillThirdJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
-
-    def B2A_transferSomeToFirst(self, d):
-        if d>0 and self.currentState[0]+d<=12 and self.currentState[1]-d>=0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[1]=self.currentState[1]-d
-            self.currentState[0]=self.currentState[0]+d
-            print("B2A_transferToFillFirstJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
-
-    def C2A_transferSomeToFirst(self, d):
-        if d>0 and self.currentState[0]+d<=12 and self.currentState[2]-d>=0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[2]=self.currentState[2]-d
-            self.currentState[0]=self.currentState[0]+d
-            print("C2A_transferSomeToFirstJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
-
-    def A2B_transferSomeToSecond(self, d):
-        if d>0 and self.currentState[1]+d<=8 and self.currentState[0]-d>=0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[0]=self.currentState[0]-d
-            self.currentState[1]=self.currentState[1]+d
-            print("A2B_transferSometoSecondJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
-    
-    def C2B_transferSomeToSecond(self, d):
-        if d>0 and self.currentState[1]+d<=8 and self.currentState[2]-d>=0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[2]=self.currentState[2]-d
-            self.currentState[1]=self.currentState[1]+d
-            print("C2B_transferSometoSecondJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
+    def isGoalReached(self):
+        for i in range(0, len(self.currentState)):
+            if self.goalState[i]!=-1 and self.currentState[i]!=self.goalState[i]:
+                return False
         
-    def A2C_transferSomeToThird(self, d):
-        if d>0 and self.currentState[2]+d<=5 and self.currentState[0]-d>=0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[0]=self.currentState[0]-d
-            self.currentState[2]=self.currentState[2]+d
-            print("A2C_transferSometoThirdJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
-
-    
-    def B2C_transferSomeToThird(self, d):
-        if d>0 and self.currentState[2]+d<=5 and self.currentState[1]-d>=0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[1]=self.currentState[1]-d
-            self.currentState[2]=self.currentState[2]+d
-            print("B2C_transferSometoThirdJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
-
-    def transferAllToFirst(self):
-        sum=self.currentState[0]+self.currentState[1]+self.currentState[2]
-        if sum>0 and sum<=12 and self.currentState[1]>=0 and self.currentState[2]>=0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[0]=sum
-            self.currentState[1]=0
-            self.currentState[2]=0
-            print("transferAllToFirstJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
-
-    def transferAllToSecond(self):
-        sum=self.currentState[0]+self.currentState[1]+self.currentState[2]
-        if sum>0 and sum<=8 and self.currentState[0]>=0 and self.currentState[2]>=0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[0]=0
-            self.currentState[1]=sum
-            self.currentState[2]=0
-            print("transferAllToSecondJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
-
-    def transferAllToThird(self):
-        sum=self.currentState[0]+self.currentState[1]+self.currentState[2]
-        if sum>0 and sum<=5 and self.currentState[0]>=0 and self.currentState[1]>=0:
-            self.prevState=copy.deepcopy(self)
-            self.currentState[0]=0
-            self.currentState[1]=0
-            self.currentState[2]=sum
-            print("transferAllToThirdJug")
-            return True
-        else:
-            #print("Cannot transfer")
-            return False
+        return True
 
     def displayState(self):
-        print("------------------------------------------")
         print(self.currentState)
+        print("*******************************")
 
-    def isGoalReached(self):
-        if self.currentState[0]==self.goalState and self.currentState[1]==self.goalState:
+    def fillSomeJugXFromTap(self, x, d):
+        if self.currentState[x]+d<=self.maxCapacity[x]:
+            print(f"Jug {x+1} current capacity={self.currentState[x]}. Filling {d} litres from tap")
+            self.prevState=copy.deepcopy(self)
+            self.currentState[x]=self.currentState[x]+d
             return True
         else:
             return False
 
-    def _eq_(self, other):
-        return self.currentState==other.currentState
+    def pourSomeFromJugXtoJugY(self, x, y, d):
+        if self.currentState[x]>0 and self.currentState[x]-d>=0 and self.currentState[y]+d<=self.maxCapacity[y]:
+            print(f"Jug {x+1} current capacity={self.currentState[x]}. Jug {y+1} current capacity={self.currentState[y]}. Pouring {d} litre from Jug {x+1} to Jug {y+1}")
+            self.prevState=copy.deepcopy(self)
+            self.currentState[y]=self.currentState[y]+d
+            self.currentState[x]=self.currentState[x]-d
+            return True
+        else:
+            return False
+
+    def emptySomeJugX(self, x, d):
+        if self.currentState[x]-d>=0:
+            print(f"Jug {x+1} current capacity={self.currentState[x]}. Emptying {d} litre from it")
+            self.prevState=copy.deepcopy(self)
+            self.currentState[x]=self.currentState[x]-d
+            return True
+        else:
+            return False
 
     def possibleNextStates(self):
         stateList=[]
+
+        """
+        for x in range(0, len(self.currentState)):
+            for d in range(1, self.maxCapacity[x]+1):
+                stateCopy=copy.deepcopy(self)
+                if stateCopy.fillSomeJugXFromTap(x, d):
+                    stateList.append(stateCopy)
+        """
         
-        B2A_transferToFillFirstJug_state=copy.deepcopy(self)
-        if B2A_transferToFillFirstJug_state.B2A_transferToFillFirst():
-            stateList.append(B2A_transferToFillFirstJug_state)
+        for x in range(0, len(self.currentState)):
+            for y in range(0, len(self.currentState)):
+                if x!=y:
+                    for d in range(1, maxCapacity[y]+1):
+                        stateCopy=copy.deepcopy(self)
+                        if stateCopy.pourSomeFromJugXtoJugY(x, y, d):
+                            stateList.append(stateCopy)
 
-        C2A_transferToFillFirstJug_state=copy.deepcopy(self)
-        if C2A_transferToFillFirstJug_state.C2A_transferToFillFirst():
-            stateList.append(C2A_transferToFillFirstJug_state)
-
-        A2B_transferToFillSecondJug_state=copy.deepcopy(self)
-        if A2B_transferToFillSecondJug_state.A2B_transferToFillSecond():
-            stateList.append(A2B_transferToFillSecondJug_state)
-
-        C2B_transferToFillSecondJug_state=copy.deepcopy(self)
-        if C2B_transferToFillSecondJug_state.C2B_transferToFillSecond():
-            stateList.append(C2B_transferToFillSecondJug_state)
-
-        A2C_transferToFillThirdJug_state=copy.deepcopy(self)
-        if A2C_transferToFillThirdJug_state.A2C_transferToFillThird():
-            stateList.append(A2C_transferToFillThirdJug_state)
-
-        B2C_transferToFillThirdJug_state=copy.deepcopy(self)
-        if B2C_transferToFillThirdJug_state.B2C_transferToFillThird():
-            stateList.append(B2C_transferToFillThirdJug_state)
-            
-        for d in range (0, 13):
-            B2A_transferSomeToFillFirstJug_state=copy.deepcopy(self)
-            if B2A_transferSomeToFillFirstJug_state.B2A_transferSomeToFirst(d):
-                stateList.append(B2A_transferSomeToFillFirstJug_state)
-            
-            C2A_transferSomeToFillFirstJug_state=copy.deepcopy(self)
-            if C2A_transferSomeToFillFirstJug_state.C2A_transferSomeToFirst(d):
-                stateList.append(C2A_transferSomeToFillFirstJug_state)
-
-            A2B_transferSomeToFillFirstJug_state=copy.deepcopy(self)
-            if A2B_transferSomeToFillFirstJug_state.A2B_transferSomeToSecond(d):
-                stateList.append(A2B_transferSomeToFillFirstJug_state)
-
-            C2B_transferSomeToFillFirstJug_state=copy.deepcopy(self)
-            if C2B_transferSomeToFillFirstJug_state.C2B_transferSomeToSecond(d):
-                stateList.append(C2B_transferSomeToFillFirstJug_state)
-
-            A2C_transferSomeToFillFirstJug_state=copy.deepcopy(self)
-            if A2C_transferSomeToFillFirstJug_state.A2C_transferSomeToThird(d):
-                stateList.append(A2C_transferSomeToFillFirstJug_state)
-        
-            B2C_transferSomeToFillFirstJug_state=copy.deepcopy(self)
-            if B2C_transferSomeToFillFirstJug_state.B2C_transferSomeToThird(d):
-                stateList.append(B2C_transferSomeToFillFirstJug_state)
-
-        transferAllToFirstJug_state=copy.deepcopy(self)
-        if transferAllToFirstJug_state.transferAllToFirst():
-            stateList.append(transferAllToFirstJug_state)
-
-        transferAllToSecondJug_state=copy.deepcopy(self)
-        if transferAllToSecondJug_state.transferAllToSecond():
-            stateList.append(transferAllToSecondJug_state)
-
-        transferAllToThirdJug_state=copy.deepcopy(self)
-        if transferAllToThirdJug_state.transferAllToThird():
-            stateList.append(transferAllToThirdJug_state)
+        for x in range(0, len(self.currentState)):
+            for d in range(1, self.maxCapacity[x]+1):
+                stateCopy=copy.deepcopy(self)
+                if stateCopy.emptySomeJugX(x, d):
+                    stateList.append(stateCopy)
 
         return stateList
 
-def constructPath(goalState):
-    print("The solution path from Goal to Start")
-    while goalState is not None:
+def constructGoalPath(goalState):
+    print("Printing path from start to goal")
+    while goalState:
         goalState.displayState()
         goalState=goalState.prevState
 
 def BFS(startState):
     open=[]
     closed=[]
+
     open.append(startState)
+    
     while open:
-        print(len(open), len(closed))
+
         thisState=open.pop(0)
-        #pop(0) -- queue for bfs
-        #pop    -- stack for dfs
         thisState.displayState()
+
         if thisState not in closed:
+            
             closed.append(thisState)
+
             if thisState.isGoalReached():
-                print("Goal state found.. stopping search")
-                constructPath(thisState)
+                print("Goal found..")
+                constructGoalPath(thisState)
                 break
+
             nextStates=thisState.possibleNextStates()
             for eachState in nextStates:
-                if eachState not in closed and eachState not in open:
+                if eachState not in open and eachState not in closed:
                     open.append(eachState)
 
-                    
-start=[12, 0, 0]
-goal=6
+maxCapacity=[]
+start=[]
+goal=[]
+n=int(input("Enter no of Jugs: "))
+for i in range(0, n):
+    temp1, temp2, temp3=input(f"Enter max capacity, current capacity and goal capacity(-1 for don't care) of Jug {i+1}: ").split()
+    maxCapacity.append(int(temp1))
+    start.append(int(temp2))
+    goal.append(int(temp3))
 
-problem=MyWaterJug(start, goal)
+problem=MyWaterJug(maxCapacity, start, goal)
+problem.displayState()
 BFS(problem)
