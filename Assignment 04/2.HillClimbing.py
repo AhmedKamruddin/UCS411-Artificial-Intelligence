@@ -100,7 +100,6 @@ def HillClimbing(startState):
                 if eachState.heuristic() > thisState.heuristic():
                     open.append(eachState)
                     closed.append(thisState)
-                    break
     
     if returnVal!=1:
         print("Error: Local Maxima")
