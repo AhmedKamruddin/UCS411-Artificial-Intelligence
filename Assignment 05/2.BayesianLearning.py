@@ -60,12 +60,6 @@ for row in csvreader:
     
     rows.append(row)
 
-    #Selection
-    if(row[4]==1):
-        selected[0]+=1
-    elif(row[4]==0):
-        selected[1]+=1
-
     #GradPercent
     if(75<=row[0]):
         gradPercent[0]+=1
@@ -174,6 +168,13 @@ for row in csvreader:
             prob_interview[3][0]+=1
         elif(row[4]==0):
             prob_interview[3][1]+=1    
+
+    #Selection
+    if(row[4]==1):
+        selected[0]+=1
+    elif(row[4]==0):
+        selected[1]+=1
+        
 file.close()
 
 #PROBABILITES
