@@ -1,5 +1,5 @@
 # UCS411-Artificial-Intelligence
-Codes for AI Assignments
+Artificial Intelligence assignments
 #
 24/3/22
 - Shortened and generalised Water Jug codes of assignment 2
